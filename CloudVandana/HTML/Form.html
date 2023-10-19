@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(255, 255, 255);
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #c5eaed;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(161, 160, 160, 0.1);
+        }
+        h2 {
+            text-align: center;
+            text-shadow: 0 0 10px rgba(198, 37, 37, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+        }
+        select, input[type="text"], input[type="email"], input[type="tel"] {
+            width: 90%;
+            margin-top: 5px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        select {
+            width: 95%;
+        }
+        input {
+            padding: 5px;
+            margin-top: 5px;
+        }
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        button {
+            padding: 5px;
+            width: 5em;
+            background-color: #fff;
+            color: #0d4f55;
+            border-color: #c5eaed;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Customer Survey Form</h2>
+        <form action="#" id="surveyForm">
+            <div class="form-group">
+                <label for="firstName">First Name </label>
+                <input type="text" id="firstName" maxlength="25" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name </label>
+                <input type="text" id="lastName" maxlength="25" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" required>
+                    <option disabled selected value> -- select an option -- </option>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="India">India</option>
+                    <!-- Add more countries here -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label> Gender </label>
+                <label>
+                    <input type="checkbox" class="radio" value="Male" name="gender" />Male
+                </label>
+                <label>
+                    <input type="checkbox" class="radio" value="Female" name="gender" />Female
+                </label>
+                <label>
+                    <input type="checkbox" class="radio" value="Others" name="gender" />Others
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="profession">Profession</label>
+                <input type="text" id="profession" maxlength="25" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email </label>
+                <input type="email" id="email" maxlength="18" required>
+            </div>
+            <div class="form-group">
+                <label for="country_code">Phone Number</label>
+                <input type="text" name="country_code" maxlength="10" title="Error Message" pattern="[1-9]{1}[0-9]{9}" required id="mobile">
+            </div>
+            <button type="button" onclick="submitForm()">Submit</button>
+            <button type="button" onclick="resetForm()">Reset</button>
+        </form>
+    </div>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <h3>Survey Form Submission</h3>
+            <div id="popup-content"></div>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+</body>
+<script>
+    function resetForm() {
+        document.getElementById('surveyForm').reset();
+    }
+    function submitForm() {
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const dob = document.getElementById('dob').value;
+        const country = document.getElementById('country').value;
+        const profession = document.getElementById('profession').value;
+        const email = document.getElementById('email').value;
+        const mobile = document.getElementById('mobile').value;
+        const gender = [...document.querySelectorAll('input[name="gender"]')]
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        if (!firstName || !lastName || !dob || !country || gender.length === 0 || !profession || !email || !mobile) {
+            alert('Please fill in all required fields before submitting.');
+            return;
+        }
+
+        const content = `
+            <p><strong>First Name:</strong> ${firstName}</p>
+            <p><strong>Last Name:</strong> ${lastName}</p>
+            <p><strong>Date of Birth:</strong> ${dob}</p>
+            <p><strong>Country:</strong> ${country}</p>
+            <p><strong>Gender:</strong> ${gender.join(', ')}</p>
+            <p><strong>Profession:</strong> ${profession}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Mobile Number:</strong> ${mobile}</p>
+        `;
+
+        document.getElementById('popup-content').innerHTML = content;
+        document.getElementById('popup').style.display = 'flex'; // Changed to 'flex' display
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+            resetForm();
+    }
+    </script>
+    </html>
